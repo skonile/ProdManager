@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+
+    RewriteRule ^public/ - [L]
+    RewriteRule ^asserts/ - [L]
+    RewriteRule ^uploads/ - [L]
+    RewriteRule ^install/ - [L]
+
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
+    RewriteRule (.+) public/$1 [L]
+
+    RewriteRule (.*) public/index.php [L,QSA]
+</IfModule>
