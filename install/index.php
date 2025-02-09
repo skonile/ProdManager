@@ -27,7 +27,7 @@ if(count($_POST) > 0){
         $adminUsername = sanitizeString($_POST['admin-username']) ?? '';
         $adminPassword = sanitizeString($_POST['admin-password']) ?? '';
 
-        if($hostname == '' || $username == '' || $password == '' || $dbName == '' || $adminUsername == '' || $adminUsername == '')
+        if($hostname == '' || $username == '' || $password == '' || $dbName == '' || $adminUsername == '' || $adminPassword == '')
             $error = "All form fields need to be filled.";
 
         if($error == '' && !preg_match('/^[a-zA-Z0-9_]+$/', $adminUsername))
@@ -49,6 +49,15 @@ if(count($_POST) > 0){
                 1049 => "Database name, {$dbName}, does not exist or not accesable via this user.",
                 default => "Something went wrong with our installation."
             };
+        }
+    }
+
+    // Create a database config file.
+    if($error == ''){
+        try{
+            createConfigurationFile($hostname, $dbName, $username, $password);
+        } catch(Throwable $e){
+            $error = $e->getMessage();
         }
     }
     
@@ -77,6 +86,15 @@ function sanitizeString(string $text): string{
     return htmlspecialchars(trim($text), ENT_QUOTES, 'UTF-8');
 }
 
+/**
+ * Retrieves a list of file paths from a specified directory.
+ *
+ * This function scans the given directory and returns an array
+ * containing the paths of all files within that directory.
+ *
+ * @param string $dir The directory path to scan for files.
+ * @return array An array of file paths found in the directory.
+ */
 function getFilesFromDir(string $dir): array{
     $files = [];
     $filesDirs = scandir($dir);
@@ -87,6 +105,17 @@ function getFilesFromDir(string $dir): array{
     return $files;
 }
 
+/**
+ * Executes a series of SQL files on a given MySQLi database connection.
+ *
+ * Iterates over an array of file paths, executing each SQL file using the
+ * provided MySQLi database object. If any execution fails, the function
+ * returns false immediately. If all executions succeed, it returns true.
+ *
+ * @param array $files An array of file paths to SQL files to be executed.
+ * @param mysqli $dbObj The MySQLi database connection object.
+ * @return bool True if all SQL files are executed successfully, false otherwise.
+ */
 function execSqlFiles(array $files, mysqli $dbObj): bool{
     foreach($files as $file){
         $res = execSqlFile($file, $dbObj);
@@ -96,6 +125,17 @@ function execSqlFiles(array $files, mysqli $dbObj): bool{
     return true;
 }
 
+/**
+ * Executes SQL commands from a file on a given MySQL database connection.
+ *
+ * This function reads the contents of a specified SQL file and executes
+ * the SQL commands using the provided mysqli database connection object.
+ * It handles multiple queries and ensures that all results are processed.
+ *
+ * @param string $file The path to the SQL file to be executed.
+ * @param mysqli $dbObj The MySQLi database connection object.
+ * @return bool Returns true if all queries are executed successfully, false otherwise.
+ */
 function execSqlFile(string $file, mysqli $dbObj): bool {
     $content = file_get_contents($file);
     if (!$content)
@@ -116,6 +156,17 @@ function execSqlFile(string $file, mysqli $dbObj): bool {
     }
 }
 
+/**
+ * Adds an admin user to the database with the given username and password.
+ *
+ * This function hashes the provided password and inserts a new admin user
+ * into the 'user' table with predefined first name, last name, email, and level.
+ *
+ * @param string $username The username for the new admin user.
+ * @param string $password The password for the new admin user.
+ * @param mysqli $dbObj The database connection object.
+ * @return bool Returns true if the user was successfully added, false otherwise.
+ */
 function addAdminUser($username, $password, mysqli $dbObj): bool{
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $dbObj->prepare("INSERT INTO user (first_name, last_name, username, email, password, level) 
@@ -129,6 +180,52 @@ function addAdminUser($username, $password, mysqli $dbObj): bool{
     $stmt->close();
 
     return $result;
+}
+
+/**
+ * Creates a configuration file for database connection.
+ *
+ * This function generates a PHP configuration file containing
+ * database connection details such as hostname, database name,
+ * username, and password. It checks if the configuration directory
+ * and file are writable before writing the configuration content.
+ *
+ * @param string $hostname The database server hostname.
+ * @param string $databaseName The name of the database.
+ * @param string $username The username for database access.
+ * @param string $password The password for database access.
+ *
+ * @throws Exception If the configuration directory or file is not writable.
+ */
+function createConfigurationFile(string $hostname, string $databaseName, string $username, string $password){
+    $configDir  = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config';
+    $dbFilename = $configDir . DIRECTORY_SEPARATOR . 'database.php';
+
+    echo $configDir;
+
+    // Check if the config directory is writable.
+    if(!is_writable($configDir))
+        throw new Exception("Configuration directory '$configDir' is not writable.");
+
+    // Check if the database config file is writable.
+    if(file_exists($dbFilename) && !is_writable($dbFilename))
+        throw new Exception("Configuration file '$dbFilename' is not writable.");
+
+    $configContent = <<<CONFIG
+<?php
+declare(strict_types = 1);
+
+# Database information
+define('DB_HOSTNAME', '$hostname');
+define('DB_USERNAME', '$username');
+define('DB_PASSWORD', '$password');
+define('DB_NAME', '$databaseName');
+CONFIG;
+
+    # Create the database config file.
+    $fhandle = fopen($dbFilename, 'w');
+    fwrite($fhandle, $configContent);
+    fclose($fhandle);
 }
 #endregion
 ?>
