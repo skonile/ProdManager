@@ -3,7 +3,7 @@
 /uploads/tmp/*
 /tests/Unit/DataProviders
 /.phpunit.result.cache
-/config/config.php
+/config/database.php
 /tests/Unit/Plugins
 /cron.log
 /app/Validator.php
