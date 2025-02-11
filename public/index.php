@@ -93,7 +93,7 @@ $router->get('/plugin/delete', PluginsController::class, 'deletePlugin');
 // Users Routes
 $router->get('/users', UserController::class, 'getUsers');
 $router->get('/user/{id}', UserController::class, 'getUser');
-$router->post('/user/{id}', UserController::class, 'addUser');
+$router->post('/user/add', UserController::class, 'addUser');
 $router->post('/user/update', UserController::class, 'updateUser');
 $router->post('/user/delete', UserController::class, 'deleteUser');
 

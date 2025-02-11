@@ -1,0 +1,46 @@
+.formbuilder{
+    padding: 0;
+    margin: 0;
+}
+
+.formbuilder h1,
+.formbuilder h2,
+.formbuilder h3,
+.formbuilder h4,
+.formbuilder h5,
+.formbuilder h6{
+    margin-bottom: 10px;
+}
+
+.formbuilder input,
+.formbuilder textarea{
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    outline: none;
+    border-radius: 0px;
+    font-size: 17px;
+}
+
+.formbuilder input[type='submit']{
+    background-color: #6788FF;
+    color: #fff;
+    cursor: pointer;
+}
+
+.formbuilder input[type='submit']:hover{
+    background-color: #4e74fc;
+}
+
+.formbuilder-errors{
+    border: 1px solid red;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.formbuilder-errors ul{
+    list-style-position: inside;
+}
+
+.formbuilder-errors ul li{
+    color: red;
+}

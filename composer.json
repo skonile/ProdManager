@@ -1,0 +1,31 @@
+{
+    "name": "konil/prodmanager-mvc",
+    "type": "project",
+    "authors": [
+        {
+            "name": "siyabongakonile",
+            "email": "siyabongakonile@gmail.com"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "app/functions.php"
+        ],
+        "psr-4": {
+            "App\\": "app/",
+            "Plugins\\": "plugins/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "require": {
+        "twig/twig": "^3.5",
+        "automattic/woocommerce": "^3.1"
+    }
+}
