@@ -8,6 +8,8 @@
 /cron.log
 /app/Validator.php
 /plugins/WoocommercePlugin
-/plugins/FacebookPlugin
 test.php
+/tests
+/app/Cron
+/app/FormBuilder
 .$prodmanager.drawio.bkp
