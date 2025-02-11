@@ -1,0 +1,44 @@
+{% extends 'default.html.twig' %}
+
+{% block content %}
+<div class="brands-cont">
+    <div class="heading-btn-cont">
+        <div class="heading">
+            <h1>Brands</h1>
+        </div>
+        <div class="heading-btn-cont-inner">
+            <a href="/brand/create" class="btn btn-primary btn-round">New Brand</a>
+        </div>
+    </div>
+
+    <div class="brands-cont-inner">
+        <div class="brands-table-cont">
+            <table class="brands-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for brand in brands %}
+                    <tr class="brand-item" data-brand-item="/brand/{{ brand.getId }}">
+                        <td>{{ brand.getId }}</td>
+                        <td>{{ brand.getName }}</td>
+                        <td><a href="/brand/{{ brand.getId }}" class="btn btn-primary btn-round btn-small">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Slug</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

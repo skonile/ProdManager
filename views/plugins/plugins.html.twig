@@ -1,0 +1,37 @@
+{% extends "default.html.twig" %}
+
+{% block content %}
+<div class="plugins-cont">
+    <div class="heading-btn-cont">
+        <div class="heading">
+            <h1>Categories</h1>
+        </div>
+        <div class="heading-btn-cont-inner">
+            <a href="/plugin/add" class="btn btn-primary btn-round">Install Plugin</a>
+        </div>
+    </div>
+    <div class="plugins-cont-inner">
+        <div class="plugins-table-cont">
+            <table class="plugins-table">
+                <thead>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody>
+                    {% for plugin in plugins %}
+                    <tr>
+                        <td>{{ plugin.getName }}</td>
+                        <td>{{ plugin.getDescription }}</td>
+                        <td>
+                            <a href="/plugin/{{ plugin.getSystemName }}" class="btn btn-primary btn-round">Edit</a>
+                            <a href="/plugin/Test?plugin={{ plugin.getSystemName }}" class="btn btn-primary btn-round">Test</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

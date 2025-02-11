@@ -1,0 +1,63 @@
+{% extends "default.html.twig" %}
+
+{% block content %}
+{% if route == '/category/create' %}
+    {% set isNewCategory = true %}
+{% else %}
+{% set isNewCategory = false %}
+{% endif %}
+<div class="category-cont">
+    <div class="heading-btn-cont">
+        <div class="heading">
+            <h1>{% if isNewCategory == true %}New Category{% else %}Categories{% endif %}</h1>
+        </div>
+        {% if route != "/category/create" %}
+        <div class="heading-btn-cont-inner">
+            <a href="javascript: window.location = '/category/delete?category-id={{ category.getId }}'" class="btn btn-danger btn-round">Delete Category</a>
+            <a href="/category/create" class="btn btn-primary btn-round">New Category</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="category-cont">
+        <form action="{% if isNewCategory == true %}/category/create{% else %}/category/update{% endif %}" method="post" class="category-form">
+            <input type="hidden" name="category-id" value="{{ category.getId }}">
+
+            <div class="form-row">
+                <label for="category-name">Name</label>
+                <input type="text" name="category-name" id="category-name" value="{{ category.getName }}">
+            </div>
+
+            <div class="form-row">
+                <label for="category-slug">Slug</label>
+                <input type="text" name="category-slug" id="category-slug" value="{{ category.getSlug }}">
+            </div>
+
+            <div class="form-row">
+                <label for="category-slug">Parent</label>
+                <select name="category-parent" id="category-parent">
+                    {% if category.getParentObject != null %}
+                    <option value="{{ category.getParentObject.getId }}">{{ category.getParentObject.getName }}</option>
+                    {% endif %}
+                    <option value="">Select Category Parent</option>
+                    {% for category in categories %}
+                        <option value="{{ category.getId }}">{{ category.getName }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="category-status">Publish Status</label>
+                <select name="category-status" id="category-status">
+                    <option value="0" {% if category.getIsPublished == false %}selected{% endif %}>Save as Draft</option>
+                    <option value="1" {% if category.getIsPublished == true %}selected{% endif %}>Published</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <button name="submit" class="btn btn-primary btn-round">{% if isNewCategory == true %}Create Category{% else %}Update Category{% endif %}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

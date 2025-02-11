@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProdManager</title>
+    <link rel="stylesheet" href="/asserts/css/main.css">
+    <link rel="stylesheet" href="/asserts/css/formbuilder.css">
+</head>
+<body>
+    <div class="main-cont">
+        <!-- Start of Side Navigation -->
+        <div class="side-nav-cont">
+            <div class="logo-cont">
+                <div class="logo-img-cont">
+                    <img src="/asserts/img/logo/logo.png" alt="">
+                </div>
+            </div>
+            <div class="side-nav-links-cont">
+                <ul class="side-nav-links">
+                    <li class="side-nav-link">
+                        <a href="/product/create" 
+                        class="side-nav-link-item btn btn-full-width {% if route == '/product/create' %}btn-primary{% endif %}">New Product</a>
+                    </li>
+                    <li class="side-nav-link">
+                        <a href="/products" class="side-nav-link-item btn btn-full-width {% if route == '/products' or route == '/product' %}btn-primary{% endif %}">Products</a>
+                    </li>
+                    <li class="side-nav-link">
+                        <a href="/categories" class="side-nav-link-item btn btn-full-width {% if route == '/categories' or route == '/category' or route == '/category/create' %}btn-primary{% endif %}">Categories</a>
+                    </li>
+                    <li class="side-nav-link">
+                        <a href="/tags" class="side-nav-link-item btn btn-full-width {% if route == '/tags' or route == '/tag' or route == '/tag/create' %}btn-primary{% endif %}">Tags</a>
+                    </li>
+                    <li class="side-nav-link">
+                        <a href="/brands" class="side-nav-link-item btn btn-full-width {% if route == '/brands' or route == '/brand' or route == '/brand/create' %}btn-primary{% endif %}">Brands</a>
+                    </li>
+                    {% if userlevel == 'admin' %}
+                    <li class="side-nav-link">
+                        <a href="/users" class="side-nav-link-item btn btn-full-width {% if route == '/users' or route starts with '/user' %}btn-primary{% endif %}">Users</a>
+                    </li>
+                    {% endif %}
+                    <li class="side-nav-link">
+                        <a href="/plugins" class="side-nav-link-item btn btn-full-width {% if route starts with '/plugin' %}btn-primary{% endif %}">Plugins</a>
+                    </li>
+                    <li class="side-nav-link">
+                        <a href="/settings" class="side-nav-link-item btn btn-full-width {% if route == '/settings' %}btn-primary{% endif %}">Settings</a>
+                    </li>
+                    <li class="side-nav-link">
+                        <a href="/about" class="side-nav-link-item btn btn-full-width {% if route == '/about' %}btn-primary{% endif %}">About</a>
+                    </li>
+                    {% if isLoggedIn %}
+                    <li class="side-nav-link">
+                        <a href="/logout" class="side-nav-link-item btn btn-full-width {% if route == '/about' %}btn-primary{% endif %}">Log Out</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <!-- End of Side Navigation -->
+
+        <!-- Start of Content -->
+        <div class="content">
+            <div class="content-cont">
+                {% if message %}<div class="message-cont">{{ message }}</div>{% endif %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+        <!-- End of Content -->
+    </div>
+
+    <script src="/asserts/js/functions.js">
+    </script>
+    <script src="/asserts/js/validator.js">
+    </script>
+    <script src="/asserts/js/main.js">
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% set prodsLength = products | length %}
+{% set lastPageFloat = prodsPage / limit %}
+{% set lastPage = lastPageFloat |round(0, 'ceil') %}
+<div class="pagination-cont">
+    <div class="pagination">
+        <ul class="pagination-list">
+        {% if pageNum > 5 %}
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/1/{{ limit }}?{{ route | getPaginationRouteQuery }}">&lt;&lt;</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ pageNum - 1 }}/{{ limit }}?{{ route | getPaginationRouteQuery }}">&lt;</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ pageNum - 2 }}/{{ limit }}?{{ route | getPaginationRouteQuery }}">{{ pageNum - 2 }}</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ pageNum - 1 }}/{{ limit }}?{{ route | getPaginationRouteQuery }}">{{ pageNum - 1 }}</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ pageNum }}/{{ limit }}?{{ route | getPaginationRouteQuery }}" class="active">{{ pageNum }}</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ pageNum + 1 }}/{{ limit }}?{{ route | getPaginationRouteQuery }}">{{ pageNum + 1 }}</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ pageNum + 2 }}/{{ limit }}?{{ route | getPaginationRouteQuery }}">{{ pageNum + 2 }}</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ pageNum + 1 }}/{{ limit }}?{{ route | getPaginationRouteQuery }}">&gt;</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/" class="last">&gt;&gt;</a></li>
+        {% else %}
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/1/{{ limit }}?{{ route | getPaginationRouteQuery }}">&lt;&lt;</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ pageNum == 1 ? 1 : pageNum - 1 }}/{{ limit }}?{{ route | getPaginationRouteQuery }}">&lt;</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/1/{{ limit }}?{{ route | getPaginationRouteQuery }}" class="{% if pageNum == 1 %} active {% endif %}">1</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/2/{{ limit }}?{{ route | getPaginationRouteQuery }}" class="{% if pageNum == 2 %} active {% endif %}">2</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/3/{{ limit }}?{{ route | getPaginationRouteQuery }}" class="{% if pageNum == 3 %} active {% endif %}">3</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/4/{{ limit }}?{{ route | getPaginationRouteQuery }}" class="{% if pageNum == 4 %} active {% endif %}">4</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/5/{{ limit }}?{{ route | getPaginationRouteQuery }}" class="{% if pageNum == 5 %} active {% endif %}">5</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ pageNum + 1 }}/{{ limit }}?{{ route | getPaginationRouteQuery }}">&gt;</a></li>
+            <li class="pagination-item"><a href="{{ route | getPaginationRoute }}/{{ lastPage }}" class="last">&gt;&gt;</a></li>
+        {% endif %}
+        </ul>
+    </div>
+</div>

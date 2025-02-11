@@ -1,0 +1,158 @@
+{% extends 'default.html.twig' %}
+{% block content %}
+{% set prodCond = product.getConditionAsString %}
+{% set shipping = product.getShipping %}
+{% if route == '/product/create' %}
+    {% set isNewProduct = true %}
+{% else %}
+    {% set isNewProduct = false %}
+{% endif %}
+<div class="product-cont">
+    <div class="heading">
+        <h1>{{ pageTitle }}</h1>
+    </div>
+
+    <div class="product-content">
+        <div class="product-form-cont">
+            <form action="{% if isNewProduct == true %}/product/create{% else %}/product/update{% endif %}" method="post" class="product-form" id="product-form" data-product-id="{{ product.getId }}" enctype='multipart/form-data'>
+                <input type="hidden" name="product-id" value="{{ product.getId }}">
+                <input type="hidden" name="product-client-id" id="product-client-id" value="">
+                <div class="product-main">
+                    <div class="form-row">
+                        <div class="form-left">
+                            <label for="product-name">Name</label>
+                            <input type="text" name="product-name" id="product-name" required value="{{ product.getName }}">
+                        </div>
+                        <div class="form-right">
+                            <label for="product-code">Code</label>
+                            <input type="text" name="product-code" id="product-code" value="{{ product.getCode }}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-left">
+                            <label for="product-price">Price</label>
+                            <input type="text" name="product-price" id="product-price" required value="{{ product.getPrice }}">
+                        </div>
+                        <div class="form-right">
+                            <label for="product-quantity">Quantity</label>
+                            <input type="text" name="product-quantity" id="product-quantity" value="{{ product.getQuantity }}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-full">
+                            <label for="product-description">Description</label>
+                            <textarea type="text" name="product-description" id="product-description">{{ product.getDescription }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        {# <div class="form-left"> #}
+                            <label for="product-condition">Condition</label>
+                            <select name="product-condition" id="product-condition">
+                                <option value="new" {% if prodCond == "new" %}selected{% endif %}>New</option>
+                                <option value="good" {% if prodCond == "good" %}selected{% endif %}>Good</option>
+                                <option value="fair" {% if prodCond == "fair" %}selected{% endif %}>Fair</option>
+                                <option value="notworking" {% if prodCond == "notworking" %}selected{% endif %}>Not working</option>
+                            </select>
+                        {# </div> #}
+                        {# <div class="form-right">
+                            <label for="product-shipping-class">Shipping Class</label>
+                            <select name="shipping-class" id="product-shipping-class">
+                                <option value="">Select Shipping Class</option>
+                            </select>
+                        </div> #}
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-full">
+                            <div class="form-heading-cont">
+                                <h4 class="form-heading">Shipping</h4>
+                            </div>
+                            <div class="form-items-cont">
+                                <div class="form-item">
+                                    <label for="product-shipping-local">Local</label>
+                                    <input type="text" name="product-shipping-local" id="product-shipping-local" value="{{ shipping.getLocal }}">
+                                </div>
+                                <div class="form-item">
+                                    <label for="product-shipping-nationwide">Nationwide</label>
+                                    <input type="text" name="product-shipping-nationwide" id="product-shipping-nationwide" value="{{ shipping.getNationwide }}">
+                                </div>
+                                <div class="form-item">
+                                    <label for="product-shipping-international">International</label>
+                                    <input type="text" name="product-shipping-international" id="product-shipping-international" value="{{ shipping.getInternational }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-full">
+                            <div class="form-heading-cont">
+                                <h4 class="form-heading">Images</h4>
+                            </div>
+                            <div class="form-images-cont" id="product-images">
+                                {% if product.getImages | length > 0 %}
+                                    {% for image in product.getImages %}
+                                    <div class="form-image">
+                                        <img src="/uploads/product-imgs/{{ image }}">
+                                        <div class="remove-image-btn-cont">
+                                            <div class="remove-image-btn-cont-inner">
+                                                <div class="remove-image-btn" data-image-name="{{ image }}">
+                                                    <span class="remove-image-text">Remove</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-image-btn">
+                                <input type="file" name="img"  id="product-img-input" style="display: none;">
+                                <input type="button" value="ADD IMAGE" class="btn btn-primary btn-round btn-full-width" id="product-add-image-btn">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="product-status">Publish Status</label>
+                        <select name="product-status" id="product-status">
+                            <option value="0" {% if product.getIsPublished == false %}selected{% endif %}>Save as Draft</option>
+                            <option value="1" {% if product.getIsPublished == true %}selected{% endif %}>Published</option>
+                        </select>
+                    </div>
+                    
+                    {% if productPlugins|length > 0 %}
+                    <div class="form-row" id="plugin-fields-cont">
+                        <div class="form-heading-cont">
+                            <h4 class="form-heading">Plugin Fields</h4>
+                        </div>
+
+                        {% for plugin in plugins %}
+                            {% set pluginFields = plugin.getPluginFields %}
+                            {% if not pluginFields == null %}
+                                <div class="plugin-fields plugin-item" data-plugin="{{ plugin.getSystemName }}">
+                                    <div class="plugin-name-cont">
+                                        <h5>{{ plugin.getName }}</h5>
+                                    </div>
+                                    <div class="plugin-fields-cont">
+                                        {{ pluginFields|raw }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% include 'inc/sidebar.html.twig' %}
+
+                <div class="form-row">
+                    <button name="submit" value="publish" class="btn btn-primary btn-round">{% if isNewProduct == true %}Create Product{% else %}Update Product{% endif %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'default.html.twig' %}
+
+{% block content %}
+<div class="products-cont">
+    <div class="heading">
+        <h1>Products</h1>
+    </div>
+    <div class="filters-cont">
+        <form action="/products" method="get" class="filters-form">
+            <div class="filters-form-row">
+                <div class="filters-form-code">
+                    <input type="text" name="product-code" placeholder="Code" id="filters-form-product-code">
+                </div>
+                <div class="filters-form-category">
+                    <select name="product-categories" id="filters-form-product-categories">
+                        <option value="category">Category</option>
+                        {% for category in categories %}
+                        <option value="{{ category.getId }}">{{ category.getName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filters-form-instock">
+                    <select name="product-instock" id="filters-form-product-instocks">
+                        <option value="all">In / Out of Stock</option>
+                        <option value="instock">In Stock</option>
+                        <option value="outofstock">Out Of Stock</option>
+                    </select>
+                </div>
+                <div class="filters-form-ispublished">
+                    <select name="product-ispublished" id="filters-form-product-ispublished">
+                        <option value="all">Is Published</option>
+                        <option value="published">Published</option>
+                        <option value="draft">Not Published</option>
+                    </select>
+                </div>
+                <div class="filters-form-submit">
+                    <div id="filters-form-product-submit">
+                        <input type="submit" value="Filter" class="btn btn-primary btn-round">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="products-cont-inner">
+        <div class="products-row">
+            <div class="products-data">
+                <p>
+                    {{ products | length }} products found 
+                    | <span class="clear-filter color-primary">Clear filters</span>
+                </p>
+            </div>
+
+            {{ include('inc/pagination.html.twig') }}
+        </div>
+
+        <div class="products-row">
+            <div class="products-table-cont">
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Is Published</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for product in products %}
+                    {% set images = product.getImages %}
+                        <tr data-product-item="/product/{{ product.getId }}" class="product-item">
+                            <td>{{ product.getId }}</td>
+                            <td><img src="/uploads/product-imgs/{% if images | length == 0 %}{{ 'default.png' }}{% else %}{{ images[0] }}{% endif %}" width="50" height="50"></td>
+                            <td>{{ product.getName }}</td>
+                            <td>{{ product.getCode }}</td>
+                            <td>R{{ product.getPrice }}</td>
+                            <td>{{ product.getQuantity }}</td>
+                            <td>{{ product.getIsPublished == 1 ? 'Yes' : 'No' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Is Published</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        
+
+        <div class="products-row">
+            <div class="products-data">
+                <p>
+                    {{ products | length }} products found
+                </p>
+            </div>
+
+            {{ include('inc/pagination.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "default.html.twig" %}
+
+{% block content %}
+<div class="plugin-cont">
+    <div class="heading-btn-cont">
+        <div class="heading">
+            <h1>{{ plugin.getName }}</h1>
+        </div>
+        <div class="heading-btn-cont-inner">
+            <a href="/plugin/delete?plugin={{ plugin.getSystemName }}" class="btn btn-primary btn-round">Delete Plugin</a>
+        </div>
+    </div>
+    <div class="plugin-cont-inner">
+        <div class="plugin-form-cont">
+            {{ plugin.getConfigViewFormFeilds|raw }}
+        </div>
+    </div>
+</div>
+{% endblock %}

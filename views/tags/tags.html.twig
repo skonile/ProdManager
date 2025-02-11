@@ -1,0 +1,44 @@
+{% extends "default.html.twig" %}
+
+{% block content %}
+<div class="tags-cont">
+    <div class="heading-btn-cont">
+        <div class="heading">
+            <h1>Tags</h1>
+        </div>
+        <div class="heading-btn-cont-inner">
+            <a href="/tag/create" class="btn btn-primary btn-round">New Tag</a>
+        </div>
+    </div>
+
+    <div class="tags-cont-inner">
+        <div class="tags-table-cont">
+            <table class="tags-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Slug</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tag in tags %}
+                    <tr class="tag-item" data-tag-item="/tag/{{ tag.getId }}">
+                        <td>{{ tag.getId }}</td>
+                        <td>{{ tag.getName }}</td>
+                        <td>{{ tag.getSlug }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Slug</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

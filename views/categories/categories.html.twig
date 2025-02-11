@@ -1,0 +1,48 @@
+{% extends "default.html.twig" %}
+
+{% block content %}
+<div class="categories-cont">
+    <div class="heading-btn-cont">
+        <div class="heading">
+            <h1>Categories</h1>
+        </div>
+        <div class="heading-btn-cont-inner">
+            <a href="/category/create" class="btn btn-primary btn-round">New Category</a>
+        </div>
+    </div>
+    
+
+    <div class="categories-cont-inner">
+        <div class="categories-table-cont">
+            <table class="categories-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Slug</th>
+                        <th>Parent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr class="category-item" data-category-item="/category/{{ category.getId }}">
+                        <td>{{ category.getId }}</td>
+                        <td>{{ category.getName }}</td>
+                        <td>{{ category.getSlug }}</td>
+                        <td>{{ category.getParentObject.getName }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Slug</th>
+                        <th>Parent</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

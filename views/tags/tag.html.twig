@@ -1,0 +1,50 @@
+{% extends "default.html.twig" %}
+
+{% block content %}
+{% if route == '/tag/create' %}
+    {% set isNewTag = true %}
+{% else %}
+{% set isNewTag = false %}
+{% endif %}
+<div class="tag-cont">
+    <div class="heading-btn-cont">
+        <div class="heading">
+            <h1>{% if isNewTag == true %}New Tag{% else %}Tag{% endif %}</h1>
+        </div>
+        {% if route != "/tag/create" %}
+        <div class="heading-btn-cont-inner">
+            <a href="javascript: window.location = '/tag/delete?tag-id={{ tag.getId }}'" class="btn btn-danger btn-round">Delete Tag</a>
+            <a href="/tag/create" class="btn btn-primary btn-round">New Tag</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="tag-cont-inner">
+        <form action="{% if isNewTag == true %}/tag/create{% else %}/tag/update{% endif %}" method="post" class="tag-form">
+            <input type="hidden" name="tag-id" value="{{ tag.getId }}">
+
+            <div class="form-row">
+                <label for="tag-name">Name</label>
+                <input type="text" name="tag-name" id="tag-name" value="{{ tag.getName }}">
+            </div>
+
+            <div class="form-row">
+                <label for="tag-slug">Slug</label>
+                <input type="text" name="tag-slug" id="tag-slug" value="{{ tag.getSlug }}">
+            </div>
+
+            <div class="form-row">
+                <label for="tag-slug">Publish Status</label>
+                <select name="tag-status" id="tag-status">
+                    <option value="0" {% if tag.getIsPublished == false %}selected{% endif %}>Save as Draft</option>
+                    <option value="1" {% if tag.getIsPublished == true %}selected{% endif %}>Published</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <button name="submit" class="btn btn-primary btn-round">{% if isNewTag == true %}New Tag{% else %}Update Tag{% endif %}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

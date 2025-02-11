@@ -1,0 +1,22 @@
+{% extends 'default.html.twig' %}
+
+{% block content %}
+<div class="brand-cont">
+    <div class="brand-form-cont">
+        <form action="/brand/update" method="post">
+            <input type="hidden" name="brand-id" value="{{ brand.getId }}">
+            <div class="form-row">
+                <input type="text" name="brand" id="brand" value="{{ brand.getName }}" placeholder="Brand Name">
+            </div>
+            <div class="form-row">
+                <div class="form-half">
+                    <input type="button" value="Delete" class="btn btn-danger">
+                </div>
+                <div class="form-half">
+                    <input type="button" value="Update" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

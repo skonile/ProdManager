@@ -1,0 +1,100 @@
+            <!-- Start of Side Content -->
+            <div class="side-cont-cont">
+                <div class="side-cont-inner">
+                    <div class="side-cont-section">
+                        <div class="side-cont-section-inner">
+                            <div class="side-cont-section-heading-cont">
+                                <h4 class="side-cont-section-heading">Categories</h4>
+                            </div>
+                            <div class="side-cont-section-cont">
+                                {% for category in categories %}
+                                <div class="side-section-item">
+                                    <label>
+                                        <input type="checkbox" 
+                                                name="product-category[]" 
+                                                class="product-category" 
+                                                data-category-id="{{ category.getId }}" 
+                                                value="{{ category.getId }}"
+                                                {% if product != null %}
+                                                    {% if category|isInArray(product.getCategories) %}checked{% endif %}
+                                                {% endif %}
+                                                > 
+                                        {{ category.getName }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="side-cont-section">
+                        <div class="side-cont-section-inner">
+                            <div class="side-cont-section-heading-cont">
+                                <h4 class="side-cont-section-heading">Tags</h4>
+                            </div>
+                            <div class="side-cont-section-cont">
+                                {% for tag in tags %}
+                                <div class="side-section-item">
+                                    <label>
+                                        <input type="checkbox" 
+                                                name="product-tag[]" 
+                                                class="product-tag" 
+                                                data-tag-id="{{ tag.getId }}" 
+                                                value="{{ tag.getId }}"
+                                                {% if product != null %}
+                                                    {% if tag|isInArray(product.getTags) %}checked{% endif %}
+                                                {% endif %}
+                                                > 
+                                        {{ tag.getName }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="side-cont-section">
+                        <div class="side-cont-section-inner">
+                            <div class="side-cont-section-heading-cont">
+                                <h4 class="side-cont-section-heading">Brands</h4>
+                            </div>
+                            <div class="side-cont-section-cont">
+                                {% for brand in brands %}
+                                <div class="side-section-item">
+                                    <label>
+                                        <input type="radio" 
+                                                name="product-brand" 
+                                                class="product-brand" 
+                                                data-brand-id="{{ brand.getId }}"
+                                                value="{{ brand.getId }}"
+                                                {% if product != null %}
+                                                    {% if brand|isInArray([product.getBrand]) %}checked{% endif %}
+                                                {% endif %}
+                                                > 
+                                        {{ brand.getName }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="side-cont-section">
+                        <div class="side-cont-section-inner">
+                            <div class="side-cont-section-heading-cont">
+                                <h4 class="side-cont-section-heading">Publish To</h4>
+                            </div>
+                            <div class="side-cont-section-cont">
+                                {% for plugin in plugins %}
+                                    <div class="side-section-item">
+                                        <label>
+                                            <input type="checkbox" name="plugins[]" {% if plugin.getSystemName in productPlugins %}checked{% endif %} value="{{ plugin.getSystemName }}"> {{ plugin.getName }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Side Content -->

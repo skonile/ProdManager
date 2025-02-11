@@ -1,0 +1,21 @@
+{% extends "default.html.twig" %}
+
+{% block content %}
+<div class="plugin-cont">
+    <div class="heading-btn-cont">
+        <div class="heading">
+            <h1>Install Plugin</h1>
+        </div>
+    </div>
+    <div class="plugin-cont-inner">
+        <div class="plugin-form-cont">
+            <form action="/plugin/add" method="post" enctype="multipart/form-data">
+                {{ errors|raw }}
+                <label for="plugin">Select the plugin zip file:</label>
+                <input type="file" name="plugin" id="plugin">
+                <input type="submit" value="UPLOAD">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
