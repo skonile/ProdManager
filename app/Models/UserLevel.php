@@ -15,4 +15,12 @@ enum UserLevel: string{
 
         return null;
     }
+
+    public static function all(): array{
+        return [
+            UserLevel::Viewer->value,
+            UserLevel::User->value,
+            UserLevel::Admin->value
+        ];
+    }
 }
