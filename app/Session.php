@@ -20,7 +20,7 @@ class Session{
         $_SESSION[$key] = $value;
     }
 
-    public function get($key): string|bool|null|int|float{
+    public function get(string $key): string|bool|null|int|float{
         if(!isset($_SESSION[$key]))
             return null;
         return $_SESSION[$key];
