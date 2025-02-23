@@ -12,7 +12,7 @@ class Request{
     public function __construct($method, $uri, $params = []){
         $this->method = $method;
         $this->uri = $uri;
-        $this->params = $params;
+        $this->params = $this->sanitizeParams($params);
         $this->setUriArgsParts();
     }
 
@@ -110,5 +110,16 @@ class Request{
      */
     public function getPOST(): array{
         return $_POST;
+    }
+
+    public function sanitizeParams(array $params): array{
+        $sanitezedArr = [];
+        foreach($params as $key => $value)
+            $sanitezedArr[$key] = $this->sanitizeString($value);
+        return $sanitezedArr;
+    }
+
+    public function sanitizeString(string $text): string{
+        return htmlspecialchars(trim($text), ENT_QUOTES, 'UTF-8');
     }
 }
