@@ -1,7 +1,5 @@
 {% extends "default.html.twig" %}
 
-
-
 {% block content %}
 <div class="users-cont">
     <div class="heading-btn-cont">
@@ -22,19 +20,19 @@
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Level</th>
-                        <th>Edit/View</th>
+                        <th>View/Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
                     <tr class="user-item" data-brand-item="/user/{{ user.getId }}">
                         <td>{{ user.getId }}</td>
-                        <td>{{ user.getName }}</td>
+                        <td>{{ user.getName }} {% if currentUserId == user.getId %}(You){% endif %}</td>
                         <td>{{ user.getLastname }}</td>
                         <td>{{ user.getLevel.value }}</td>
                         <td>
                             <a href="/user/{{ user.getId }}" class="btn btn-primary btn-round btn-small">View</a>
-                            <a href="/user/{{ user.getId }}" class="btn btn-primary btn-round btn-small">Edit</a>
+                            <a href="/user/delete/{{ user.getId }}" class="btn btn-danger btn-round btn-small" onclick="confirmUserDeletion" data-user="{{ user.getName }}">Delete</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -45,7 +43,7 @@
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Level</th>
-                        <th>Edit/View</th>
+                        <th>View/Delete</th>
                     </tr>
                 </tfoot>
             </table>
