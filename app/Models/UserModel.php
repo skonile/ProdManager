@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Models;
 
+use App\Crypto;
 use DateTime;
 use App\Models\User;
 
@@ -14,13 +15,24 @@ class UserModel extends BaseModel{
         string $email, 
         string $password, 
         UserLevel $level): bool{
+            $password = Crypto::encrypt($password);
             $sql = "INSERT INTO user (first_name, last_name, username, email, password, level) 
-                    VALUES ('{$name}', '{$lastname}', '{$username}', '{$email}', '{$password}', '{$level->value}')";
-            return $this->database->queryWithBool($sql);
+                    VALUES (?, ?, ?, ?, ?, ?)";
+            return $this->database->preparedQueryWithBool(
+                $sql,
+                [
+                    $name,
+                    $lastname,
+                    $username,
+                    $email,
+                    $password,
+                    $level->value
+                ]
+            );
     }
 
     public function getUser(int $userId): ?User{
-        $sql = "SELECT * FROM user WHERE id = {$userId}";
+        $sql = "SELECT * FROM user WHERE id = ?";
         $res = $this->database->preparedQuery($sql, [$userId]);
         if($res->num_rows != 1)
             return null;
