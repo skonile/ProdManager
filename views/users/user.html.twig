@@ -1,0 +1,82 @@
+{% extends "default.html.twig" %}
+
+{% block content %}
+{% if isNewUser %}
+    {% set formAction = '/user/add' %}
+{% else %}
+    {% set formAction = '/user/update' %}
+{% endif %}
+<div class="user-cont">
+    <div class="heading-btn-cont">
+        <div class="heading">
+            <h1>User</h1>
+        </div>
+        <div class="heading-btn-cont-inner">
+            {% if not isNewUser %}
+            <a href="/user/delete/{{ user.getId }}" class="btn btn-danger btn-round">Delete User</a>
+            {% endif %}
+            
+        </div>
+    </div>
+
+    <div class="user-cont-inner">
+        {% if errors %}
+        <div class="error formbuilder-errors">
+            <ul>
+                {% for error in errors %}
+                <li>{{ error }}.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <form action="{{ formAction }}" method="post">
+            <input type="hidden" name="user-id" value="{{ user.getId }}">
+            <div class="form-row">
+                <div class="form-left">
+                    <input type="text" name="fname" value="{{ user.getName }}{{ firstname }}" placeholder="Firstname">
+                </div>
+                <div class="form-right">
+                    <input type="text" name="lname" value="{{ user.getLastname }}{{ lastname }}" placeholder="Lastname">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-left">
+                    <input type="text" name="username" value="{{ user.getUsername }}{{ username }}" placeholder="Username">
+                </div>
+                <div class="form-right">
+                    <input type="email" name="email" value="{{ user.getEmail }}{{ email }}" placeholder="Email Address">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-left">
+                    {% if not isNewUser %}
+                    <input type="password" name="password" value="" placeholder="Update Password (Leave blank if not updating)">
+                    {% else %}
+                    <input type="password" name="password" value="" placeholder="Password">
+                    {% endif %}
+                </div>
+                <div class="form-right">
+                    <select name="level">
+                        {% if currentUserId == user.getId %}
+                            <option value="admin" Selected>Admin</option>
+                        {% else %}
+                            {% for userLevel in userLevels %}
+                            <option value="{{ userLevel }}" {% if currentUserLevel == userLevel %}Selected{% endif %}{% if level == userLevel %}Selected{% endif %}>{{ userLevel|capitalize }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-full">
+                        {% if not isNewUser %}
+                        <input class="btn btn-primary" type="submit" value="Update">
+                        {% else %}
+                        <input class="btn btn-primary" type="submit" value="Add User">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
