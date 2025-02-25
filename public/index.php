@@ -21,14 +21,12 @@ require_once '../config/config.php';
 
 session_start();
 
-$requestUri = $_SERVER['REQUEST_URI'];
-$requestMethod = $_SERVER['REQUEST_METHOD'];
-
-$request = new Request($requestMethod, $requestUri);
-$response = new Response();
-$router = new Router($request, $response);
-
-$app = new App($router, $request, $response);
+$requestUri     = $_SERVER['REQUEST_URI'];
+$requestMethod  = $_SERVER['REQUEST_METHOD'];
+$request        = new Request($requestMethod, $requestUri);
+$response       = new Response();
+$router         = new Router($request, $response);
+$app            = new App($router, $request, $response);
 
 // Add global middleware
 $router->middleware('Auth');
@@ -93,9 +91,10 @@ $router->get('/plugin/delete', PluginsController::class, 'deletePlugin');
 // Users Routes
 $router->get('/users', UserController::class, 'getUsers');
 $router->get('/user/{id}', UserController::class, 'getUser');
+$router->get('/user/add', UserController::class, 'getAddUser');
 $router->post('/user/add', UserController::class, 'addUser');
-$router->post('/user/update', UserController::class, 'updateUser');
-$router->post('/user/delete', UserController::class, 'deleteUser');
+$router->post('/user/update/{id}', UserController::class, 'updateUser');
+$router->get('/user/delete/{id}', UserController::class, 'deleteUser');
 
 // Other Software Pages Routes
 $router->get('/', PageController::class, 'getHome');
