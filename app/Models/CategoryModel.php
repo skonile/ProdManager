@@ -74,6 +74,22 @@ class CategoryModel extends BaseModel{
     /**
      * Add a new category to the database.
      * 
+     * @param Category $category The category object to add
+     * @return Category|bool The new added category with its insert id 
+     *                       or false if the category was not added
+     */
+    public function addCategoryFromObj(Category $category): Category|bool{
+        return $this->addCategory(
+            $category->getName(), 
+            $category->getSlug(), 
+            $category->getParentId(), 
+            $category->getIsPublished()
+        );
+    }
+
+    /**
+     * Add a new category to the database.
+     * 
      * @param string $name
      * @param string $slug
      * @param ?int $parent
