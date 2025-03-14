@@ -43,6 +43,7 @@ class Response{
 
         // Send response body
         echo $this->body;
+        exit;
     }
 
     public function sendToHomePage(){
@@ -55,5 +56,12 @@ class Response{
 
     public function sendToPage404(){
         header("HTTP/1.1 404 Not Found");
+    }
+
+    public function json(array $data, int $statusCode = 200): static{
+        $this->setHeader(new Header('Content-Type', 'application/json'));
+        $this->statusCode = $statusCode;
+        $this->body = json_encode($data);
+        return $this;
     }
 }
