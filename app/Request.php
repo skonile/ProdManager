@@ -8,6 +8,7 @@ class Request{
     protected string $uri;
     protected $uriArgsParts;
     protected array $params;
+    protected array $uriVariables = [];
 
     public function __construct($method, $uri, $params = []){
         $this->method = $method;
@@ -52,8 +53,23 @@ class Request{
         return $this->uriArgsParts[2] ?? null;
     }
 
+    /**
+     * Retrieve the sanitized parameters of the request.
+     *
+     * @return array The request parameters.
+     */
     public function getParams(){
         return $this->params;
+    }
+
+    /**
+     * Set a parameter in the request.
+     *
+     * @param string $key The key for the parameter.
+     * @param string $value The value to set for the parameter.
+     */
+    public function setParam(string $key, string $value){
+        $this->params[$key] = $this->sanitizeString($value);
     }
 
     /**
@@ -121,5 +137,21 @@ class Request{
 
     public function sanitizeString(string $text): string{
         return htmlspecialchars(trim($text), ENT_QUOTES, 'UTF-8');
+    }
+
+    public function getHeader(string $headerName): ?string{
+        return getallheaders()[$headerName] ?? null;
+    }
+
+    public function getBody(): string{
+        return file_get_contents('php://input');
+    }
+
+    public function getUriVariable(string $key): ?string{
+        return $this->uriVariables[$key] ?? null;
+    }
+
+    public function setUriVariable(string $key, string $value){
+        $this->uriVariables[$key] = $value;
     }
 }
