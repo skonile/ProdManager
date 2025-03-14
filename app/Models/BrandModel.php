@@ -67,9 +67,9 @@ class BrandModel extends BaseModel{
      * @param string $name The brand name
      * @return Brand The newly created brand
      */
-    public function addBrand(string $name): Brand|bool{
+    public function addBrand(string $name): Brand|false{
         $sql = "INSERT INTO brand (brand_name) VALUES (?)";
-        if($this->database->preparedQuery($sql, [$name])){
+        if($this->database->preparedQueryWithBool($sql, [$name])){
             return new Brand((int) $this->database->getInsertId(), $name);
         }
         return false;
