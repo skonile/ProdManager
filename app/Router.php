@@ -66,6 +66,42 @@ class Router{
     }
 
     /**
+     * Register a put route.
+     *
+     * @param string $route
+     * @param string $class
+     * @param string $action
+     * @return Route
+     */
+    public function put(string $route, string $class, string $action): Route{
+        return $this->register($route, 'put', $class, $action);
+    }
+
+    /**
+     * Register a patch route.
+     *
+     * @param string $route
+     * @param string $class
+     * @param string $action
+     * @return Route
+     */
+    public function patch(string $route, string $class, string $action): Route{
+        return $this->register($route, 'patch', $class, $action);
+    }
+
+    /**
+     * Register a delete route.
+     *
+     * @param string $route
+     * @param string $class
+     * @param string $action
+     * @return Route
+     */
+    public function delete(string $route, string $class, string $action): Route{
+        return $this->register($route, 'delete', $class, $action);
+    }
+
+    /**
      * Resolves the current request by determining the appropriate route
      * based on the request URI and method. It handles both non-variable
      * and variable URIs, invoking the corresponding controller action
@@ -100,16 +136,16 @@ class Router{
      * @param string $uri The URI to check for variable segments.
      * @return bool True if the URI contains variable segments, false otherwise.
      */
-    private function isVariableUri(string $uri): bool{
-        $uriParts = \explode("/", $uri);
-        foreach($uriParts as $uriPart){
-            $startWithBracket = \strpos($uriPart, '{') === 0;
-            $endWithBracket = \strpos($uriPart, '}') === \strlen($uriPart) - 1;
-            if($startWithBracket and $endWithBracket)
-                return true;
-        }
-        return false;
-    }
+    // private function isVariableUri(string $uri): bool{
+    //     $uriParts = \explode("/", $uri);
+    //     foreach($uriParts as $uriPart){
+    //         $startWithBracket = \strpos($uriPart, '{') === 0;
+    //         $endWithBracket = \strpos($uriPart, '}') === \strlen($uriPart) - 1;
+    //         if($startWithBracket and $endWithBracket)
+    //             return true;
+    //     }
+    //     return false;
+    // }
 
     /**
      * Get the registed routes.
@@ -202,16 +238,22 @@ class Router{
      * @param string $method The HTTP method of the request.
      * @return string|bool The matching route's URI or false if no match is found.
      */
-    private function getMatchingVariableRoute(string $uri, string $method): string|bool{
-        $uriParts = \explode('/', $uri);
-
-        /** @var Route $route */
+    private function getMatchingVariableRoute(string $uri, string $method): string|false{
         foreach($this->routes as $route){
-            $routeParts = \explode('/', $route->route);
-            if($route->method == $method && \count($routeParts) == \count($uriParts) 
-                && $uriParts[1] === $routeParts[1] && $this->isVariableUri($route->route)){
+            preg_match_all('/\{([a-zA-Z0-9_]+)\}/', $route->route, $matches);
+            $routeVariables = $matches[1];
+            $routeRegex = preg_replace('/\{[a-zA-Z0-9_]+\}/','([a-zA-Z0-9_]+)', $route->route);
+            $routeRegex = '/^' . str_replace('/', '\/', $routeRegex) . '$/';
+
+            preg_match($routeRegex, $uri, $matches);
+            if(!$matches)
+                continue;
+
+            foreach($routeVariables as $key => $routeVariable)
+                $this->request->setUriVariable($routeVariable, $matches[$key + 1]);
+
+            if($uri == $matches[0])
                 return $route->route;
-            }
         }
         return false;
     }
